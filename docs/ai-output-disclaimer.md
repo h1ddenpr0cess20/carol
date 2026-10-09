@@ -33,11 +33,11 @@ MIT License in this repository.
   own and no opinions of its own.
 - The persona is a few paragraphs of system prompt in `src/server/persona.js`.
   It is a costume on someone else's model, not a mind.
-- That costume is a bookish old lady who knits, reads and writes, and
+- That costume is a bookish retired librarian who knits, reads and writes, and
   she will sound warm, wise and sure of herself. She is none of those things.
   She cannot see you — the App has no camera — her cat and her reading chair
   do not exist, and what she says is a language model's output, which can be
-  wrong with complete confidence. The kindly certainty is part of the costume,
+  wrong with complete confidence. The warm certainty is part of the costume,
   not a signal that anything has been checked.
 - She tells stories when asked — spinning a yarn is the bit. A story is
   fiction, and it can be mistaken for an anecdote or a fact when it is heard

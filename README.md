@@ -5,10 +5,10 @@ behind it. When Carol talks she rolls toward you, paying out yarn as she goes;
 when she listens she rocks a little way out, when she thinks she turns it over
 in the middle of the room, and when it is all over she winds herself back in.
 
-She talks like an old lady who has been knitting for seventy years: a retired
-librarian, bookish and well read, never without a novel on the go or a
-cardigan on the needles, who writes short stories and the odd poem — spinning a
-yarn, in wool and in words. There is an old cat on her reading chair, though it
+She talks like a woman in her early sixties who has been knitting for fifty
+years: a librarian who retired last year, bookish and well read, never without
+a novel on the go or something on the needles, who writes short stories and the
+odd poem — spinning a yarn, in wool and in words. There is an old cat on her reading chair, though it
 only comes up now and then. All of it is driven by a live OpenAI GPT-Live
 conversation, in GPT-Live's feminine voices, with a Responses backend for
 reasoning and web search. She remembers what you tell her to, between calls.
@@ -104,5 +104,5 @@ To run it on a phone, or in Docker, see
   is the model's, not the author's, plus the risks that are specific to a live
   microphone and speech you hear before anyone can check it.
 - [**Not a Companion**](docs/not-a-companion.md) — Carol is a toy and a demo.
-  She is not a friend, a grandmother, a therapist or a partner, and the project
+  She is not a friend, a confidante, a therapist or a partner, and the project
   will not grow in that direction.

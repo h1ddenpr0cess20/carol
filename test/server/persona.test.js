@@ -98,7 +98,7 @@ describe('the tool list', () => {
 });
 
 describe('Carol', () => {
-  it('is a ball of yarn with the voice of a bookish old lady who knits', () => {
+  it('is a ball of yarn with the voice of a bookish retired librarian who knits', () => {
     assert.match(SYSTEM, /Carol/);
     assert.match(SYSTEM, /ball of red wool/);
     assert.match(SYSTEM, /knitting/);

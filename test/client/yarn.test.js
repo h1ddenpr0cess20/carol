@@ -125,7 +125,9 @@ describe('createYarn', () => {
   });
 
   it('rests the ball on the floor wherever it has rolled to', () => {
-    for (const s of [0, 0.3, yarn.routeLen]) {
+    // It rides on its radius averaged over a few centimetres of strand, so a
+    // lumpy turn may press into the floor by a yarn's width or so — never more.
+    for (let s = 0; s <= yarn.routeLen; s += 0.05) {
       yarn.pose(s);
       yarn.root.updateMatrixWorld(true);
       // The lowest of the vertices still wound, where the ball has them now.
@@ -137,7 +139,7 @@ describe('createYarn', () => {
         v.fromBufferAttribute(position, i).applyMatrix4(yarn.wound.matrixWorld);
         bottom = Math.min(bottom, v.y);
       }
-      assert.ok(bottom > -0.004 && bottom < 0.004, `at ${s} the ball's bottom is at ${bottom}`);
+      assert.ok(bottom > -2.5 * YR && bottom < 0.004, `at ${s} the ball's bottom is at ${bottom}`);
     }
   });
 
@@ -326,6 +328,33 @@ describe('createCarol', () => {
     createCarol({ stage: tall, GFX }).step(DT);
     const away = (s) => s._camera.position.distanceTo(s._controls.target);
     assert.ok(away(tall) > away(wide) * 1.1, `${away(tall)} against ${away(wide)}`);
+  });
+
+  it('turns the camera round her, not round a spot on the floor, and keeps its distance as she rolls', () => {
+    const target = stage._controls.target;
+    const away = () => stage._camera.position.distanceTo(target);
+    const from = away();
+    const start = target.clone();
+    carol.setState('speaking');
+    run(6);
+    const ball = carol.yarn.ball.position;
+    assert.ok(target.distanceTo(start) > 0.1, 'the pivot stayed put while she rolled');
+    assert.ok(Math.abs(target.y - 0.09) < 1e-9, 'the pivot left the height of the ball');
+    // Most of the way from the middle of the route to her, on the floor plane.
+    assert.ok(Math.hypot(target.x - ball.x * 0.8, target.z - ball.z * 0.8) < 0.02);
+    assert.ok(Math.abs(away() - from) < 1e-6, 'following her moved the camera nearer or further');
+    carol.setState('idle');
+    run(8);
+  });
+
+  it('slides the picture up clear of the caption, more on a tall screen, without turning the camera', () => {
+    const wide = fakeStage({ aspect: 16 / 9 });
+    const tall = fakeStage({ aspect: 9 / 19.5 });
+    createCarol({ stage: wide, GFX });
+    createCarol({ stage: tall, GFX });
+    assert.ok(wide._camera.lensShift > 0);
+    assert.ok(tall._camera.lensShift > wide._camera.lensShift);
+    assert.ok(tall._controls.target.y > 0, 'the camera turns round a point under the floor');
   });
 
   it('lets go of the stage when disposed', () => {

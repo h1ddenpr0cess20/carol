@@ -764,13 +764,15 @@ export class PerspectiveCamera extends Camera {
     this.near = near;
     this.far = far;
     this.aspect = aspect;
+    /** Slides the picture up by this share of its height without turning the camera, like a tilt-shift lens. */
+    this.lensShift = 0;
     this.updateProjectionMatrix();
   }
 
   updateProjectionMatrix() {
     const near = this.near;
-    const top = near * Math.tan((Math.PI / 180) * 0.5 * this.fov) / this.zoom;
-    const height = 2 * top;
+    const height = 2 * near * Math.tan((Math.PI / 180) * 0.5 * this.fov) / this.zoom;
+    const top = 0.5 * height - (this.lensShift ?? 0) * height;
     const width = this.aspect * height;
     const left = -0.5 * width;
     this.projectionMatrix.makePerspective(left, left + width, top, top - height, near, this.far);

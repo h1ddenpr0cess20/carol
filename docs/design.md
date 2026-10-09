@@ -78,18 +78,19 @@ the floor exactly where the ball was when it got there — so rolling out and
 rolling back are exact inverses, and the wound part ends where the laid part
 begins.
 
-The route (`yarn/path.js`) runs from the back of the room toward the camera's
-usual seat: she comes to you to talk and goes back when it is over. It is a
-centripetal Catmull-Rom spline with a gentle sway, so the strand behind her is
-never hidden by the ball, sampled evenly by arc length. Behind its start a 22 cm
+The route (`yarn/path.js`) runs on the diagonal, from the back of the room on
+the left to the front on the right of the camera's usual seat: she comes forward
+to talk and goes back when it is over. It is a centripetal Catmull-Rom spline
+with a gentle sway, sampled evenly by arc length. Behind its start a 22 cm
 tail always lies on the floor, curling off to one side as it nears its end.
 
 The yarn is from a design asset written for three.js; it runs here on the same
 small engine as the other characters. Three things were added to Carol's copy of
 `vendor/gfx/` for it: repeat wrapping on textures (the plies tile along a strand
-seventy-odd metres long), and an `onFrame` hook on the stage that runs after the
+seventy-odd metres long), an `onFrame` hook on the stage that runs after the
 controls and before the shadow pass, so the ball and its shadow are posed in the
-same frame. The asset's ply shader, which three let it splice into the standard
+same frame, and a `lensShift` on the camera that slides the picture up without
+turning it. The asset's ply shader, which three let it splice into the standard
 material, became the texture above.
 
 Nothing she does is a canned animation: every frame is a spring chasing a spot
@@ -99,11 +100,14 @@ on the floor, with a rhythm on top.
 
 A warm paper floor under a high key light, the stage's own studio. The shadow
 sits under the ball, and a soft dark pinch follows it where it meets the floor.
-The camera looks in from the front, a little above and to one side, down the
-route, and far enough back that the ball at its near end is still a ball and
-not the whole view. On a phone held upright it sits further back again, so the
-route's sway fits across, and the floor is lifted clear of the caption. It can orbit and zoom, but not go under
-the floor.
+The camera looks in from the front, a little above and to one side, and turns
+round Carol: what it orbits follows her most of the way from the middle of the
+route, carrying the camera with it, so a drag always swings round the ball and
+she still comes a little toward you when she rolls forward. On a phone held
+upright it sits further back, so the route fits across. The picture is slid up
+with a lens shift — more on a tall screen — so she sits clear of the caption and
+the composer without the camera aiming anywhere but at her. It can orbit and
+zoom, but not go under the floor.
 
 ## States
 
@@ -116,7 +120,7 @@ it pays strand out or winds it back in.
 - **idle** — wound up at the back of the room, breathing a little.
 - **listening** — rolled a quarter of the way toward you, rocking as she takes it in.
 - **thinking** — back and forth in the middle, turning it over.
-- **speaking** — right up to the front, paying out strand: spinning a yarn.
+- **speaking** — up to the front, paying out strand: spinning a yarn.
   The voice makes her skip.
 
 Transcript activity drives listening and speaking. Backend work drives thinking

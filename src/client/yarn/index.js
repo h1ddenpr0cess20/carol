@@ -4,14 +4,25 @@ import { ENERGY_GAIN, MOODS, ROLL } from './moods.js';
 /** The springs are stepped at no less than this, so they stay stable on a slow frame. */
 const STEP = 1 / 120;
 
-/** Where the camera looks: the middle of the route, a little under the floor — so the floor sits above the caption. */
-const TARGET = Object.freeze({ x: 0, y: -0.04, z: 0 });
+/** The middle of the route, at the height of the middle of the ball. */
+const TARGET = Object.freeze({ x: 0, y: 0.09, z: 0 });
 
 /**
- * How far up a tall screen the floor is lifted, as a share of the view's height
- * for each unit the screen is narrower than square.
+ * What the camera turns round follows her this much of the way from the middle
+ * of the route: nearly all, so a drag orbits Carol rather than a spot on the
+ * floor, but not quite, so she still comes toward you when she rolls forward.
  */
-const LIFT = 0.22;
+const FOLLOW = 0.8;
+
+/** How quickly that point keeps up with her, per second. */
+const FOLLOW_RATE = 3;
+
+/**
+ * How far up the picture is slid, as a share of its height, so she sits above
+ * the caption and the composer: a little on a wide screen, and more for each
+ * unit a tall one is narrower than square.
+ */
+const SHIFT = Object.freeze({ base: 0.06, tall: 0.22 });
 
 /** The way the camera looks in from, before anyone orbits it. */
 const SEAT = Object.freeze({ x: 1, y: 0.9, z: 1.25 });
@@ -78,22 +89,22 @@ export function createCarol({ stage, GFX, seed }) {
   /**
    * Back the camera off, along the way it already looks, far enough that the
    * ball at the near end of the route is still a ball and not the whole view,
-   * and that the route's sway fits across. On a phone held upright the width is
-   * what decides it — and the caption and the composer
-   * take the bottom of a tall screen, so the floor is lifted clear of them.
+   * and that the route fits across. On a phone held upright the width is what
+   * decides it — and the caption and the composer take the bottom of a tall
+   * screen, so the picture is slid up clear of them.
    */
   function refit(camera) {
     const target = stage._controls?.target;
     const half = Math.tan((camera.fov * Math.PI) / 360);
     const aspect = Math.max(camera.aspect || 1.6, 0.45);
-    const distance = Math.max(1.45, 0.32 / (half * aspect));
+    const distance = Math.max(0.95, 0.3 / (half * aspect));
     const away = camera.position.clone();
     if (target) away.sub(target);
     if (away.lengthSq() === 0) away.set(SEAT.x, SEAT.y, SEAT.z);
-    if (target) target.y = TARGET.y - Math.max(0, 1 - aspect) * LIFT * 2 * distance * half;
     camera.position.copy(target ?? new GFX.Vector3()).add(away.normalize().multiplyScalar(distance));
     camera.near = 0.01;
     camera.far = 50;
+    camera.lensShift = SHIFT.base + Math.max(0, 1 - aspect) * SHIFT.tall;
     camera.updateProjectionMatrix();
     if (stage._controls) {
       stage._controls.minDistance = ZOOM.in;
@@ -147,8 +158,8 @@ export function createCarol({ stage, GFX, seed }) {
   // strand lies on y = 0, and the camera is set from the route instead.
   const camera = stage._camera;
   if (camera && stage._controls) {
-    stage._controls.target.set(TARGET.x, TARGET.y, TARGET.z);
-    camera.position.set(TARGET.x + SEAT.x, TARGET.y + SEAT.y, TARGET.z + SEAT.z);
+    pivot(stage._controls.target);
+    camera.position.copy(stage._controls.target).add(new GFX.Vector3(SEAT.x, SEAT.y, SEAT.z));
     stage._controls.maxPolarAngle = Math.PI / 2 - 0.04;
     refit(camera);
     fitted = camera.aspect;
@@ -179,8 +190,28 @@ export function createCarol({ stage, GFX, seed }) {
     stage._scene.add(contact);
   }
 
+  /** Where the camera should turn round, for where she is now. */
+  function pivot(into) {
+    const b = yarn.ball.position;
+    return into.set(TARGET.x + (b.x - TARGET.x) * FOLLOW, TARGET.y, TARGET.z + (b.z - TARGET.z) * FOLLOW);
+  }
+
+  const aim = new GFX.Vector3();
+  const shift = new GFX.Vector3();
+
+  /** Carry the pivot after her, and the camera with it, so the view keeps its angle and distance. */
+  function follow(dt) {
+    const target = stage._controls?.target;
+    if (!target) return;
+    pivot(aim);
+    shift.copy(aim).sub(target).multiplyScalar(Math.min(1, dt * FOLLOW_RATE));
+    target.add(shift);
+    stage._camera?.position.add(shift);
+  }
+
   function tick(dt) {
     frame(dt);
+    follow(dt);
     if (contact) contact.position.set(yarn.ball.position.x, 0.0006, yarn.ball.position.z);
   }
 

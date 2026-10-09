@@ -7,7 +7,7 @@
  * - idle — wound up at the back of the room, breathing a little.
  * - listening — rolled a quarter of the way toward you, rocking as she takes it in.
  * - thinking — back and forth in the middle, turning it over.
- * - speaking — right up to the front: spinning a yarn, and skipping with the voice.
+ * - speaking — up to the front: spinning a yarn, and skipping with the voice.
  */
 export const MOODS = {
   idle: {

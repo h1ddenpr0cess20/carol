@@ -1,7 +1,7 @@
 /**
- * Where the ball rolls: a gentle S across the floor, from the back of the room
- * toward the camera's usual seat — she comes to you to talk, and goes back when
- * it is over — and the tail behind its start that always lies there, curling as
+ * Where the ball rolls: a gentle S on the diagonal, from the back of the room
+ * on the left toward the front on the right of the camera's usual seat — she
+ * comes forward to talk, and goes back when it is over — and the tail behind its start that always lies there, curling as
  * it nears its end. Positions are in the floor plane (x, z), in metres.
  */
 
@@ -12,11 +12,12 @@ export const NUB = 0.22;
 const RIGHT = norm([1.25, -1]);
 const TOWARD = norm([1, 1.25]);
 
-/**
- * The route's knots, as (toward, across) pairs: mostly toward the viewer, with
- * enough of a sway that the strand behind her isn't hidden by the ball.
- */
-const KNOTS = [[-0.45, -0.1], [-0.22, 0.02], [0, 0.07], [0.2, 0.03], [0.4, -0.06]];
+/** Halfway between the two: the way the route runs, and square to it. */
+const ALONG = norm([RIGHT[0] + TOWARD[0], RIGHT[1] + TOWARD[1]]);
+const SIDE = norm([TOWARD[0] - RIGHT[0], TOWARD[1] - RIGHT[1]]);
+
+/** The route's knots, as (along, side) pairs: a diagonal with a gentle sway. */
+const KNOTS = [[-0.5, -0.08], [-0.24, 0.05], [0, 0.07], [0.24, 0.0], [0.46, -0.07]];
 
 /** Floor samples every this many metres along the route; positions between are interpolated. */
 const SPACING = 0.002;
@@ -73,9 +74,9 @@ export function catmullRom(points) {
  * the tail — with the unit direction it runs in there.
  */
 export function buildRoute() {
-  const curve = catmullRom(KNOTS.map(([f, r]) => [
-    RIGHT[0] * r + TOWARD[0] * f,
-    RIGHT[1] * r + TOWARD[1] * f,
+  const curve = catmullRom(KNOTS.map(([a, s]) => [
+    ALONG[0] * a + SIDE[0] * s,
+    ALONG[1] * a + SIDE[1] * s,
   ]));
 
   // Arc length against the curve's own parameter, finely, then resampled evenly.

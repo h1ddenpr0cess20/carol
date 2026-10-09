@@ -166,8 +166,15 @@ export function createCarol({ stage, GFX, seed }) {
     stage._controls.update?.();
   }
   if (stage._ground) stage._ground.position.y = 0;
+  // The stage's studio is lit for a dark character; on a pale floor, wool in it
+  // reads blown out, so every light is turned down by about a third.
+  for (const light of stage._scene?.children ?? []) {
+    if (light.isHemisphereLight) light.intensity = 0.7;
+  }
+  if (stage._fill) stage._fill.intensity = 0.35;
   const key = stage._key;
   if (key) {
+    key.intensity = 1.5;
     key.position.set(1.2, 7, 1.6); // high: the shadow sits under the ball
     key.shadow.radius = 3;
     key.shadow.normalBias = 0.0012;

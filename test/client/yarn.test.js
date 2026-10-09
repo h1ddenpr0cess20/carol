@@ -246,6 +246,10 @@ describe('createCarol', () => {
     assert.ok(stage._controls.maxDistance > stage._camera.position.distanceTo(stage._controls.target));
   });
 
+  it('turns the studio down for a pale floor', () => {
+    assert.ok(stage._key.intensity < 2.2, 'the key is still at the stage default');
+  });
+
   it('starts wound up at the start of the route', () => {
     assert.equal(carol.state, 'idle');
     assert.equal(carol.rolled, 0);

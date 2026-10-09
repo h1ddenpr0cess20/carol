@@ -89,15 +89,16 @@ export function createCarol({ stage, GFX, seed }) {
   /**
    * Back the camera off, along the way it already looks, far enough that the
    * ball at the near end of the route is still a ball and not the whole view,
-   * and that the route fits across. On a phone held upright the width is what
-   * decides it — and the caption and the composer take the bottom of a tall
+   * and that she and the strand nearest her fit across — the camera follows
+   * her, so the rest of the route need not. On a phone held upright the width
+   * is what decides it — and the caption and the composer take the bottom of a tall
    * screen, so the picture is slid up clear of them.
    */
   function refit(camera) {
     const target = stage._controls?.target;
     const half = Math.tan((camera.fov * Math.PI) / 360);
     const aspect = Math.max(camera.aspect || 1.6, 0.45);
-    const distance = Math.max(0.95, 0.3 / (half * aspect));
+    const distance = Math.max(0.75, 0.2 / (half * aspect));
     const away = camera.position.clone();
     if (target) away.sub(target);
     if (away.lengthSq() === 0) away.set(SEAT.x, SEAT.y, SEAT.z);
@@ -166,16 +167,18 @@ export function createCarol({ stage, GFX, seed }) {
     stage._controls.update?.();
   }
   if (stage._ground) stage._ground.position.y = 0;
-  // The stage's studio is lit for a dark character; on a pale floor, wool in it
-  // reads blown out, so every light is turned down by about a third.
+  // The stage's studio is lit for a dark character, with the sky wash and the
+  // key both from above; on wool that blows the top of the ball out. The wash
+  // is turned well down, and the key comes in lower, from the front and to one
+  // side, so it models the ball instead of bleaching its crown.
   for (const light of stage._scene?.children ?? []) {
-    if (light.isHemisphereLight) light.intensity = 0.7;
+    if (light.isHemisphereLight) light.intensity = 0.45;
   }
-  if (stage._fill) stage._fill.intensity = 0.35;
+  if (stage._fill) stage._fill.intensity = 0.3;
   const key = stage._key;
   if (key) {
-    key.intensity = 1.5;
-    key.position.set(1.2, 7, 1.6); // high: the shadow sits under the ball
+    key.intensity = 1.2;
+    key.position.set(2.4, 3.4, 3.2);
     key.shadow.radius = 3;
     key.shadow.normalBias = 0.0012;
     key.shadow.camera.left = key.shadow.camera.bottom = -0.9;

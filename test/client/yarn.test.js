@@ -246,8 +246,11 @@ describe('createCarol', () => {
     assert.ok(stage._controls.maxDistance > stage._camera.position.distanceTo(stage._controls.target));
   });
 
-  it('turns the studio down for a pale floor', () => {
-    assert.ok(stage._key.intensity < 2.2, 'the key is still at the stage default');
+  it('lights the ball from the front rather than from overhead, and dimmer than the studio', () => {
+    const key = stage._key;
+    assert.ok(key.intensity < 2.2, 'the key is still at the stage default');
+    const elevation = Math.atan2(key.position.y, Math.hypot(key.position.x, key.position.z));
+    assert.ok(elevation < Math.PI / 3, `the key is ${elevation} rad up: overhead again`);
   });
 
   it('starts wound up at the start of the route', () => {

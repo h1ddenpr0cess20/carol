@@ -160,7 +160,7 @@ export function createYarn(GFX, { seed } = {}) {
 
   const material = new GFX.MeshPhysicalMaterial({
     color: WOOL, roughness: 0.94, metalness: 0,
-    sheen: 0.6, sheenRoughness: 0.55, sheenColor: new GFX.Color(SHEEN),
+    sheen: 0.3, sheenRoughness: 0.55, sheenColor: new GFX.Color(SHEEN),
     vertexColors: true,
   });
   material.name = 'yarn';

@@ -22,7 +22,7 @@ const FOLLOW_RATE = 3;
  * the caption and the composer: a little on a wide screen, and more for each
  * unit a tall one is narrower than square.
  */
-const SHIFT = Object.freeze({ base: 0.06, tall: 0.22 });
+const SHIFT = Object.freeze({ base: 0.02, tall: 0.12 });
 
 /** The way the camera looks in from, before anyone orbits it. */
 const SEAT = Object.freeze({ x: 1, y: 0.9, z: 1.25 });

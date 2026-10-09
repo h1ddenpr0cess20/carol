@@ -104,9 +104,9 @@ degrees in front and to one side, so it models the ball rather than bleaching
 its crown. The wool's sheen is kept low for the same reason. The shadow falls
 behind the ball, and a soft dark pinch follows it where it meets the floor.
 The camera looks in from the front, a little above and to one side, and turns
-round Carol: what it orbits follows her most of the way from the middle of the
-route, carrying the camera with it, so a drag always swings round the ball and
-she still comes a little toward you when she rolls forward. On a phone held
+round Carol: what it orbits follows her, carrying the camera with it, so she
+stays in the middle of the view wherever she has rolled to and a drag always
+swings round the ball. Her rolling shows in the strand paying out behind her. On a phone held
 upright it sits a little further back, so she and the strand nearest her fit
 across. The picture is slid up
 with a lens shift — more on a tall screen — so she sits clear of the caption and

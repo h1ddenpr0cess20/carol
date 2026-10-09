@@ -9,10 +9,10 @@ const TARGET = Object.freeze({ x: 0, y: 0.09, z: 0 });
 
 /**
  * What the camera turns round follows her this much of the way from the middle
- * of the route: nearly all, so a drag orbits Carol rather than a spot on the
- * floor, but not quite, so she still comes toward you when she rolls forward.
+ * of the route: all of it, so she sits in the middle of the view wherever she
+ * has rolled to, and a drag always orbits her.
  */
-const FOLLOW = 0.8;
+const FOLLOW = 1;
 
 /** How quickly that point keeps up with her, per second. */
 const FOLLOW_RATE = 3;

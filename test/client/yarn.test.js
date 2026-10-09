@@ -347,8 +347,8 @@ describe('createCarol', () => {
     const ball = carol.yarn.ball.position;
     assert.ok(target.distanceTo(start) > 0.1, 'the pivot stayed put while she rolled');
     assert.ok(Math.abs(target.y - 0.09) < 1e-9, 'the pivot left the height of the ball');
-    // Most of the way from the middle of the route to her, on the floor plane.
-    assert.ok(Math.hypot(target.x - ball.x * 0.8, target.z - ball.z * 0.8) < 0.02);
+    // Right over her, so she stays in the middle of the view.
+    assert.ok(Math.hypot(target.x - ball.x, target.z - ball.z) < 0.02);
     assert.ok(Math.abs(away() - from) < 1e-6, 'following her moved the camera nearer or further');
     carol.setState('idle');
     run(8);
